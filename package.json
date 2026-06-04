@@ -1,0 +1,12 @@
+{
+  "name": "normiran-sp-racuni",
+  "version": "1.0.0",
+  "description": "Spletna aplikacija za izdajanje računov za normiran s.p. brez DDV.",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 5173",
+    "start": "python3 -m http.server 5173",
+    "build": "node --check src/main.js && rm -rf dist && mkdir -p dist && cp index.html dist/ && cp -R src dist/src",
+    "preview": "python3 -m http.server 4173 --directory dist"
+  }
+}

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Spletna aplikacija za pripravo računov za normiran s.p. brez obračunanega DDV."
+    />
+    <title>Računi za normiran s.p. brez DDV</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <nav class="topbar" aria-label="Glavna navigacija">
+        <a class="brand" href="#top" aria-label="Računi brez DDV domov">
+          <span class="brand__mark">R</span>
+          <span>Računi brez DDV</span>
+        </a>
+        <div class="topbar__actions">
+          <button class="button button--ghost" id="exportJson" type="button">Izvozi podatke</button>
+          <label class="button button--ghost" for="importJson">Uvozi podatke</label>
+          <input id="importJson" class="sr-only" type="file" accept="application/json" />
+        </div>
+      </nav>
+
+      <section class="hero__content" id="top">
+        <div>
+          <p class="eyebrow">Normiran s.p. · brez DDV</p>
+          <h1>Hitro pripravi profesionalen račun brez obračunanega DDV.</h1>
+          <p class="hero__lead">
+            Vnesi podatke izdajatelja, naročnika in postavke. Aplikacija samodejno sešteje
+            zneske, doda klavzulo za neobračunan DDV in pripravi tiskljiv račun.
+          </p>
+          <div class="hero__cta">
+            <a class="button button--primary" href="#editor">Začni račun</a>
+            <button class="button button--secondary" id="printInvoice" type="button">Natisni / shrani PDF</button>
+          </div>
+        </div>
+        <aside class="hero__card" aria-label="Povzetek funkcij">
+          <strong>Vključeno</strong>
+          <ul>
+            <li>zaporedno številčenje računov</li>
+            <li>postavke brez DDV in popust</li>
+            <li>predloga klavzule za malega davčnega zavezanca</li>
+            <li>lokalno shranjevanje v brskalniku</li>
+            <li>izvoz v JSON in CSV</li>
+          </ul>
+        </aside>
+      </section>
+    </header>
+
+    <main class="layout" id="editor">
+      <section class="panel form-panel" aria-labelledby="form-title">
+        <div class="section-heading">
+          <p class="eyebrow">Urejanje</p>
+          <h2 id="form-title">Podatki za račun</h2>
+        </div>
+
+        <form id="invoiceForm" class="invoice-form">
+          <fieldset>
+            <legend>Izdajatelj</legend>
+            <div class="grid grid--2">
+              <label>
+                Naziv s.p.
+                <input name="issuerName" autocomplete="organization" required />
+              </label>
+              <label>
+                Davčna številka
+                <input name="issuerTax" inputmode="numeric" required />
+              </label>
+              <label>
+                Naslov
+                <input name="issuerAddress" autocomplete="street-address" required />
+              </label>
+              <label>
+                TRR / IBAN
+                <input name="issuerIban" autocomplete="off" required />
+              </label>
+              <label>
+                E-pošta
+                <input name="issuerEmail" type="email" autocomplete="email" />
+              </label>
+              <label>
+                Telefon
+                <input name="issuerPhone" autocomplete="tel" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Naročnik</legend>
+            <div class="grid grid--2">
+              <label>
+                Naziv / ime
+                <input name="clientName" required />
+              </label>
+              <label>
+                Davčna številka / ID za DDV
+                <input name="clientTax" />
+              </label>
+              <label class="grid__wide">
+                Naslov
+                <input name="clientAddress" required />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Podrobnosti računa</legend>
+            <div class="grid grid--3">
+              <label>
+                Številka računa
+                <input name="invoiceNumber" required />
+              </label>
+              <label>
+                Datum izdaje
+                <input name="issueDate" type="date" required />
+              </label>
+              <label>
+                Datum opravljene storitve
+                <input name="serviceDate" type="date" required />
+              </label>
+              <label>
+                Rok plačila
+                <input name="dueDate" type="date" required />
+              </label>
+              <label>
+                Kraj izdaje
+                <input name="place" required />
+              </label>
+              <label>
+                Referenca / sklic
+                <input name="reference" />
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <div class="fieldset-header">
+              <legend>Postavke</legend>
+              <button class="button button--small" id="addItem" type="button">Dodaj postavko</button>
+            </div>
+            <div class="items" id="itemsList" aria-live="polite"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Opombe in klavzula</legend>
+            <label>
+              Klavzula za DDV
+              <textarea name="vatClause" rows="3"></textarea>
+            </label>
+            <label>
+              Dodatna opomba
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+          </fieldset>
+
+          <div class="form-actions">
+            <button class="button button--primary" type="submit">Shrani račun</button>
+            <button class="button button--secondary" id="newInvoice" type="button">Nov račun</button>
+            <button class="button button--ghost" id="downloadCsv" type="button">CSV</button>
+          </div>
+        </form>
+      </section>
+
+      <aside class="panel preview-panel" aria-labelledby="preview-title">
+        <div class="preview-toolbar no-print">
+          <div>
+            <p class="eyebrow">Predogled</p>
+            <h2 id="preview-title">Račun</h2>
+          </div>
+          <button class="button button--primary" id="printInvoiceAside" type="button">PDF / tisk</button>
+        </div>
+        <article class="invoice" id="invoicePreview" aria-label="Predogled računa"></article>
+      </aside>
+    </main>
+
+    <section class="panel help-section no-print" aria-labelledby="help-title">
+      <div class="section-heading">
+        <p class="eyebrow">Pomembno</p>
+        <h2 id="help-title">Uporaba in omejitve</h2>
+      </div>
+      <div class="help-grid">
+        <div>
+          <h3>Za negotovinska plačila</h3>
+          <p>
+            Predloga je namenjena običajnim računom za bančno nakazilo. Pri gotovinskih plačilih
+            preveri obveznosti davčnega potrjevanja računov ali uporabi uradno rešitev FURS.
+          </p>
+        </div>
+        <div>
+          <h3>Brez DDV</h3>
+          <p>
+            Zneski postavk se ne povečajo za DDV. Privzeta klavzula predvideva, da izdajatelj ni
+            identificiran za namene DDV kot mali davčni zavezanec.
+          </p>
+        </div>
+        <div>
+          <h3>Ni pravni nasvet</h3>
+          <p>
+            Pred uporabo preveri pravilnost podatkov, klavzule in obveznih sestavin računa pri
+            računovodji ali pristojnem organu.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
