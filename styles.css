@@ -339,6 +339,75 @@ h3 {
   padding: 0.7rem 1rem;
 }
 
+.assistant-workspace {
+  display: grid;
+  gap: 1rem;
+}
+
+.tender-panel,
+.chat-shell {
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(217, 226, 242, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.tender-panel {
+  border-radius: 1.5rem;
+  display: grid;
+  gap: 1rem;
+  padding: 1.2rem;
+}
+
+.panel-label {
+  color: var(--primary);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.tender-panel h3 {
+  margin-bottom: 0.35rem;
+}
+
+.tender-panel p {
+  color: var(--muted);
+  margin-bottom: 0;
+}
+
+.tender-panel code {
+  background: var(--surface-soft);
+  border-radius: 0.4rem;
+  color: var(--primary);
+  font-weight: 700;
+  padding: 0.1rem 0.3rem;
+}
+
+.tender-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.tender-card {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.9rem;
+}
+
+.tender-card span {
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tender-card small {
+  color: var(--muted);
+}
+
 .chat-shell {
   overflow: hidden;
   border-radius: 1.7rem;
@@ -477,6 +546,10 @@ textarea:focus {
   .feature-grid,
   .source-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .assistant-workspace {
+    grid-template-columns: 1fr;
   }
 
   .hero-card {

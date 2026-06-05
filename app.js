@@ -2,24 +2,158 @@ const form = document.querySelector("#assistantForm");
 const input = document.querySelector("#assistantInput");
 const messages = document.querySelector("#chatMessages");
 const promptButtons = document.querySelectorAll("[data-prompt]");
+const tenderList = document.querySelector("#tenderList");
 
-const knowledgeBase = [
-  {
-    keywords: ["digital", "msp", "proizvod", "it", "software"],
-    response:
-      "Za digitalizacijske razpise običajno preverite: velikost podjetja, upravičene stroške, dokazila o finančni sposobnosti, časovnico izvedbe in skladnost z razpisnimi cilji. Priporočam, da pripravite kratek opis projekta, reference ekipe, finančni načrt in seznam merljivih učinkov.",
-  },
-  {
-    keywords: ["grad", "javno naro", "ponud", "primerno"],
-    response:
-      "Pri gradbenem javnem naročilu najprej preverite CPV klasifikacijo, reference v zadnjih letih, zahtevane kadre, zavarovanja, bonitetne pogoje in obvezne obrazce. Če pogojev ne izpolnjujete sami, razmislite o partnerju ali podizvajalcu.",
-  },
-  {
-    keywords: ["kontrol", "e-jn", "ejn", "oddaj", "check"],
-    response:
-      "Kontrolni seznam za oddajo: 1) prenesite zadnjo dokumentacijo, 2) označite rok za vprašanja in oddajo, 3) zberite izjave in dokazila, 4) pripravite predračun, 5) preverite elektronski podpis, 6) naložite dokumente v e-JN, 7) shranite potrdilo o oddaji.",
-  },
-];
+const tenders = Array.isArray(window.RAZPISI) ? window.RAZPISI : [];
+const relativeDateFormatter = new Intl.RelativeTimeFormat("sl", { numeric: "auto" });
+
+function parseTenderDate(date) {
+  const parsedDate = new Date(`${date}T12:00:00`);
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
+
+function formatDate(date) {
+  return new Intl.DateTimeFormat("sl-SI", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
+function daysUntil(date) {
+  const today = new Date();
+  const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const targetDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  return Math.round((targetDay - startOfToday) / 86_400_000);
+}
+
+function formatDeadline(date) {
+  const days = daysUntil(date);
+  const relative = relativeDateFormatter.format(days, "day");
+  return `${formatDate(date)} (${relative})`;
+}
+
+function normalizeText(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function tenderSearchText(tender) {
+  return normalizeText(
+    [
+      tender.id,
+      tender.naziv,
+      tender.področje,
+      tender.naročnik,
+      tender.upravičenci,
+      tender.vrednost,
+      tender.povzetek,
+      ...(tender.ključneBesede || []),
+      ...(tender.pogoji || []),
+      ...(tender.dokazila || []),
+    ].join(" "),
+  );
+}
+
+function extractSearchTerms(question) {
+  const ignoredWords = new Set([
+    "ali",
+    "ima",
+    "imamo",
+    "isce",
+    "iscem",
+    "kateri",
+    "kaksni",
+    "kaksna",
+    "razpis",
+    "razpisi",
+    "razpise",
+    "razpisov",
+    "povej",
+    "povzemi",
+    "prosim",
+    "potrebujem",
+    "slovenija",
+    "sloveniji",
+    "za",
+    "in",
+    "po",
+    "v",
+    "na",
+    "so",
+    "je",
+    "mi",
+    "rok",
+    "roki",
+    "pogoj",
+    "pogoji",
+    "dokazila",
+  ]);
+
+  return normalizeText(question)
+    .replace(/[^a-z0-9\s-]/g, " ")
+    .split(/\s+/)
+    .filter((word) => word.length > 2 && !ignoredWords.has(word));
+}
+
+function extractDayWindow(question) {
+  const match = normalizeText(question).match(/(?:v\s+)?naslednjih\s+(\d{1,3})\s+dn(?:i|eh)/);
+  return match ? Number(match[1]) : null;
+}
+
+function scoreTender(tender, terms) {
+  const haystack = tenderSearchText(tender);
+  return terms.reduce((score, term) => {
+    if (!haystack.includes(term)) {
+      return score;
+    }
+
+    const keywordHit = (tender.ključneBesede || []).some((keyword) => normalizeText(keyword).includes(term));
+    return score + (keywordHit ? 3 : 1);
+  }, 0);
+}
+
+function findMatchingTenders(question) {
+  const terms = extractSearchTerms(question);
+
+  if (terms.length === 0) {
+    return [...tenders].sort((a, b) => new Date(a.rok) - new Date(b.rok)).slice(0, 3);
+  }
+
+  return tenders
+    .map((tender) => ({ tender, score: scoreTender(tender, terms) }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || new Date(a.tender.rok) - new Date(b.tender.rok))
+    .map(({ tender }) => tender);
+}
+
+function renderTenderList() {
+  if (!tenderList) {
+    return;
+  }
+
+  tenderList.innerHTML = "";
+
+  tenders.forEach((tender) => {
+    const deadline = parseTenderDate(tender.rok);
+    const article = document.createElement("article");
+    const category = document.createElement("span");
+    const title = document.createElement("strong");
+    const owner = document.createElement("small");
+    const dueDate = document.createElement("small");
+
+    article.className = "tender-card";
+    category.textContent = tender.področje;
+    title.textContent = tender.naziv;
+    owner.textContent = tender.naročnik;
+    dueDate.textContent = `Rok: ${deadline ? formatDeadline(deadline) : tender.rok}`;
+
+    article.append(category, title, owner, dueDate);
+    tenderList.append(article);
+  });
+}
 
 function addMessage(role, text) {
   const article = document.createElement("article");
@@ -36,17 +170,49 @@ function addMessage(role, text) {
   messages.scrollTop = messages.scrollHeight;
 }
 
-function buildAssistantResponse(question) {
-  const normalizedQuestion = question.toLowerCase();
-  const match = knowledgeBase.find((entry) =>
-    entry.keywords.some((keyword) => normalizedQuestion.includes(keyword)),
-  );
+function buildTenderSummary(tender) {
+  const deadline = parseTenderDate(tender.rok);
+  const proofList = tender.dokazila.slice(0, 4).join(", ");
+  const conditionList = tender.pogoji.slice(0, 3).join("; ");
 
-  if (match) {
-    return match.response;
+  return `${tender.naziv} (${tender.id}) — naročnik: ${tender.naročnik}; področje: ${tender.področje}; rok: ${
+    deadline ? formatDeadline(deadline) : tender.rok
+  }; vrednost: ${tender.vrednost}. Povzetek: ${tender.povzetek} Ključni pogoji: ${conditionList}. Dokazila: ${proofList}.`;
+}
+
+function buildAssistantResponse(question) {
+  if (tenders.length === 0) {
+    return "V ozadju trenutno ni naloženih razpisov. Dodajte jih v datoteko razpisi.js v polje window.RAZPISI, nato osvežite stran.";
   }
 
-  return "Predlagam naslednji postopek: povzemite cilj razpisa, rok, upravičence, obvezna dokazila, merila ocenjevanja in omejitve stroškov. Nato primerjajte pogoje s profilom podjetja ter pripravite seznam odprtih vprašanj za naročnika ali razpisovalca.";
+  const normalizedQuestion = normalizeText(question);
+  const matches = findMatchingTenders(question);
+
+  if (normalizedQuestion.includes("rok") || normalizedQuestion.includes("kmalu") || normalizedQuestion.includes("dni")) {
+    const dayWindow = extractDayWindow(question);
+    const upcomingTenders = [...tenders]
+      .map((tender) => ({ tender, deadline: parseTenderDate(tender.rok) }))
+      .filter(({ deadline }) => deadline)
+      .filter(({ deadline }) => dayWindow === null || daysUntil(deadline) <= dayWindow)
+      .sort((a, b) => a.deadline - b.deadline)
+      .slice(0, 3)
+      .map(({ tender }) => buildTenderSummary(tender));
+
+    if (upcomingTenders.length === 0) {
+      return `V bazi trenutno ni razpisov z rokom v naslednjih ${dayWindow} dneh.`;
+    }
+
+    return dayWindow === null
+      ? `Najbližji roki v bazi so: ${upcomingTenders.join(" ")}`
+      : `Razpisi z rokom v naslednjih ${dayWindow} dneh so: ${upcomingTenders.join(" ")}`;
+  }
+
+  if (matches.length === 0) {
+    return "V naloženi bazi nisem našel razpisa, ki bi se dobro ujemal z vprašanjem. Poskusite z drugimi ključnimi besedami, npr. digitalizacija, energetska učinkovitost, zaposlovanje mladih, MSP ali subvencija.";
+  }
+
+  const responseIntro = matches.length === 1 ? "Našel sem najbolj relevanten razpis:" : `Našel sem ${matches.length} relevantne razpise:`;
+  return `${responseIntro} ${matches.slice(0, 3).map(buildTenderSummary).join(" ")}`;
 }
 
 form.addEventListener("submit", (event) => {
@@ -62,7 +228,7 @@ form.addEventListener("submit", (event) => {
 
   window.setTimeout(() => {
     addMessage("assistant", buildAssistantResponse(question));
-  }, 350);
+  }, 250);
 });
 
 promptButtons.forEach((button) => {
@@ -71,3 +237,5 @@ promptButtons.forEach((button) => {
     input.focus();
   });
 });
+
+renderTenderList();

@@ -108,14 +108,24 @@
           <p class="section-kicker">Interaktivni prototip</p>
           <h2 id="assistant-title">Vprašaj AI asistenta</h2>
           <p>
-            Spodnji asistent je statičen prototip. Pripravljen je za povezavo z lastnim zaledjem, razpisno bazo ali OpenAI API integracijo.
+            Spodnji asistent uporablja razpise, shranjene v ozadju strani. V datoteko razpisi.js lahko dodate svoje razpise, uporabniki pa nato po njih sprašujejo v naravnem jeziku.
           </p>
           <div class="prompt-chips" aria-label="Primeri vprašanj">
-            <button type="button" data-prompt="Povzemi mi razpis za digitalizacijo MSP in naštej dokazila.">Digitalizacija MSP</button>
-            <button type="button" data-prompt="Ali je naše podjetje primerno za gradbeni javni razpis v Sloveniji?">Primernost podjetja</button>
-            <button type="button" data-prompt="Pripravi kontrolni seznam za oddajo ponudbe na e-JN.">Kontrolni seznam</button>
+            <button type="button" data-prompt="Kateri razpisi so primerni za digitalizacijo MSP in katera dokazila potrebujem?">Digitalizacija MSP</button>
+            <button type="button" data-prompt="Poišči razpise za energetsko učinkovitost in povzetek pogojev.">Energetska učinkovitost</button>
+            <button type="button" data-prompt="Kateri razpisi imajo rok v naslednjih 45 dneh?">Roki</button>
           </div>
         </div>
+
+        <div class="assistant-workspace">
+          <div class="tender-panel" aria-labelledby="loaded-tenders-title">
+            <div>
+              <p class="panel-label">Baza znanja</p>
+              <h3 id="loaded-tenders-title">Razpisi v ozadju</h3>
+              <p>Ti razpisi so naloženi iz <code>razpisi.js</code> in jih asistent uporablja pri odgovorih.</p>
+            </div>
+            <div id="tenderList" class="tender-list"></div>
+          </div>
 
         <div class="chat-shell" role="region" aria-label="Pogovor z asistentom">
           <div class="chat-header">
@@ -136,11 +146,12 @@
             <textarea
               id="assistantInput"
               rows="3"
-              placeholder="Npr. Iščemo razpise za digitalizacijo proizvodnje v Sloveniji ..."
+              placeholder="Npr. Iščem razpis za digitalizacijo MSP ali zaposlovanje mladih ..."
               required
             ></textarea>
             <button class="button primary" type="submit">Pošlji</button>
           </form>
+        </div>
         </div>
       </section>
 
@@ -173,6 +184,7 @@
       <a href="#top">Nazaj na vrh ↑</a>
     </footer>
 
+    <script src="razpisi.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
