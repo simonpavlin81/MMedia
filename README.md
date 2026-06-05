@@ -25,9 +25,10 @@ Razpisi so shranjeni v `razpisi.js` v polju `window.RAZPISI`. Za nov razpis doda
 
 - `id`, `naziv`, `področje`, `naročnik`, `rok`, `vrednost`, `upravičenci`,
 - `ključneBesede`, `pogoji`, `dokazila`,
+- `priloge`, kjer je lahko več PDF prilog v obliki `{ naziv, url, opis }`,
 - `povzetek`.
 
-Ko datoteko shranite in stran osvežite, bo asistent uporabljal nove razpise pri iskanju in odgovorih.
+Ko datoteko shranite in stran osvežite, bo asistent uporabljal nove razpise in PDF priloge pri iskanju in odgovorih.
 
 ## Nadgradnja v pravega AI asistenta
 

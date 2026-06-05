@@ -53,6 +53,7 @@ function tenderSearchText(tender) {
       ...(tender.ključneBesede || []),
       ...(tender.pogoji || []),
       ...(tender.dokazila || []),
+      ...(tender.priloge || []).flatMap((attachment) => [attachment.naziv, attachment.opis, attachment.url]),
     ].join(" "),
   );
 }
@@ -90,6 +91,12 @@ function extractSearchTerms(question) {
     "pogoj",
     "pogoji",
     "dokazila",
+    "pdf",
+    "pdfji",
+    "pdf-ji",
+    "priloga",
+    "priloge",
+    "dokumentacija",
   ]);
 
   return normalizeText(question)
@@ -143,14 +150,27 @@ function renderTenderList() {
     const title = document.createElement("strong");
     const owner = document.createElement("small");
     const dueDate = document.createElement("small");
+    const attachmentCount = document.createElement("small");
+    const attachmentList = document.createElement("div");
 
     article.className = "tender-card";
+    attachmentList.className = "attachment-list";
     category.textContent = tender.področje;
     title.textContent = tender.naziv;
     owner.textContent = tender.naročnik;
     dueDate.textContent = `Rok: ${deadline ? formatDeadline(deadline) : tender.rok}`;
+    attachmentCount.textContent = `PDF priloge: ${tender.priloge?.length || 0}`;
 
-    article.append(category, title, owner, dueDate);
+    (tender.priloge || []).forEach((attachment) => {
+      const link = document.createElement("a");
+      link.href = attachment.url;
+      link.target = "_blank";
+      link.rel = "noreferrer";
+      link.textContent = attachment.naziv;
+      attachmentList.append(link);
+    });
+
+    article.append(category, title, owner, dueDate, attachmentCount, attachmentList);
     tenderList.append(article);
   });
 }
@@ -170,14 +190,25 @@ function addMessage(role, text) {
   messages.scrollTop = messages.scrollHeight;
 }
 
+function formatAttachmentList(tender) {
+  const attachments = tender.priloge || [];
+
+  if (attachments.length === 0) {
+    return "PDF priloge niso dodane.";
+  }
+
+  return attachments.map((attachment) => `${attachment.naziv} (${attachment.url})`).join(", ");
+}
+
 function buildTenderSummary(tender) {
   const deadline = parseTenderDate(tender.rok);
   const proofList = tender.dokazila.slice(0, 4).join(", ");
   const conditionList = tender.pogoji.slice(0, 3).join("; ");
+  const attachmentList = formatAttachmentList(tender);
 
   return `${tender.naziv} (${tender.id}) — naročnik: ${tender.naročnik}; področje: ${tender.področje}; rok: ${
     deadline ? formatDeadline(deadline) : tender.rok
-  }; vrednost: ${tender.vrednost}. Povzetek: ${tender.povzetek} Ključni pogoji: ${conditionList}. Dokazila: ${proofList}.`;
+  }; vrednost: ${tender.vrednost}. Povzetek: ${tender.povzetek} Ključni pogoji: ${conditionList}. Dokazila: ${proofList}. PDF priloge: ${attachmentList}.`;
 }
 
 function buildAssistantResponse(question) {
@@ -187,6 +218,14 @@ function buildAssistantResponse(question) {
 
   const normalizedQuestion = normalizeText(question);
   const matches = findMatchingTenders(question);
+
+  if (normalizedQuestion.includes("pdf") || normalizedQuestion.includes("prilog") || normalizedQuestion.includes("dokumentacija")) {
+    const attachmentTenders = matches.length > 0 ? matches : tenders;
+    return `PDF priloge za relevantne razpise: ${attachmentTenders
+      .slice(0, 3)
+      .map((tender) => `${tender.naziv}: ${formatAttachmentList(tender)}`)
+      .join(" ")}`;
+  }
 
   if (normalizedQuestion.includes("rok") || normalizedQuestion.includes("kmalu") || normalizedQuestion.includes("dni")) {
     const dayWindow = extractDayWindow(question);

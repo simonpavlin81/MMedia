@@ -408,6 +408,30 @@ h3 {
   color: var(--muted);
 }
 
+.attachment-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+}
+
+.attachment-list a {
+  background: var(--surface-soft);
+  border-radius: 999px;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.3rem 0.55rem;
+}
+
+.attachment-list a::before {
+  content: "PDF";
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 900;
+  margin-right: 0.35rem;
+}
+
 .chat-shell {
   overflow: hidden;
   border-radius: 1.7rem;

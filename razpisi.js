@@ -14,6 +14,18 @@ window.RAZPISI = [
       "stroški morajo nastati v obdobju upravičenosti razpisa",
     ],
     dokazila: ["projektni načrt", "finančni načrt", "izjava o poravnanih obveznostih", "ponudbe dobaviteljev"],
+    priloge: [
+      {
+        naziv: "Razpisna dokumentacija za digitalizacijo MSP",
+        url: "priloge/digi-msp-razpisna-dokumentacija.pdf",
+        opis: "Glavni PDF z namenom razpisa, pogoji, merili, roki in načinom oddaje vloge.",
+      },
+      {
+        naziv: "Obrazci za prijavo digitalizacijskega projekta",
+        url: "priloge/digi-msp-obrazci.pdf",
+        opis: "PDF paket obrazcev za projektni načrt, izjave prijavitelja in seznam upravičenih stroškov.",
+      },
+    ],
     povzetek:
       "Razpis podpira digitalno preobrazbo MSP, na primer uvedbo poslovne programske opreme, avtomatizacijo procesov in izboljšanje kibernetske varnosti.",
   },
@@ -32,6 +44,23 @@ window.RAZPISI = [
       "oprema ne sme biti kupljena pred oddajo vloge, če razpis tega ne dovoljuje",
     ],
     dokazila: ["energetski izračun", "ponudbe opreme", "dokazilo o lastništvu ali najemu objekta", "terminski plan"],
+    priloge: [
+      {
+        naziv: "Navodila za zelene investicije",
+        url: "priloge/zelene-investicije-navodila.pdf",
+        opis: "PDF navodila za pripravo vloge, dokazovanje prihrankov energije in izračun emisij CO2.",
+      },
+      {
+        naziv: "Vzorec finančnega načrta investicije",
+        url: "priloge/zelene-investicije-financni-nacrt.pdf",
+        opis: "PDF predloga za stroškovnik, vire financiranja in terminski plan zelene naložbe.",
+      },
+      {
+        naziv: "Merila za ocenjevanje zelenih projektov",
+        url: "priloge/zelene-investicije-merila.pdf",
+        opis: "PDF pregled meril, točkovanja in minimalnih pragov za energetsko učinkovitost.",
+      },
+    ],
     povzetek:
       "Razpis je namenjen podjetjem, ki želijo zmanjšati stroške energije z učinkovitejšo opremo, obnovljivimi viri ali optimizacijo proizvodnih procesov.",
   },
@@ -50,6 +79,18 @@ window.RAZPISI = [
       "kandidat mora izpolnjevati starostne in evidenčne pogoje",
     ],
     dokazila: ["pogodba o zaposlitvi", "izjava delodajalca", "dokazila o izpolnjevanju pogojev kandidata"],
+    priloge: [
+      {
+        naziv: "Javni poziv za zaposlovanje mladih",
+        url: "priloge/zaposlovanje-mladih-javni-poziv.pdf",
+        opis: "Glavni PDF z upravičenci, pogoji za delodajalce, višino subvencije in roki za oddajo.",
+      },
+      {
+        naziv: "Izjava delodajalca in kontrolni seznam",
+        url: "priloge/zaposlovanje-mladih-izjava.pdf",
+        opis: "PDF obrazec izjave delodajalca ter seznam dokazil pred podpisom pogodbe o zaposlitvi.",
+      },
+    ],
     povzetek:
       "Razpis podpira delodajalce pri zaposlovanju mladih oseb in zmanjšuje strošek uvajanja novih strokovnjakov v podjetje.",
   },

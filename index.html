@@ -108,11 +108,12 @@
           <p class="section-kicker">Interaktivni prototip</p>
           <h2 id="assistant-title">Vprašaj AI asistenta</h2>
           <p>
-            Spodnji asistent uporablja razpise, shranjene v ozadju strani. V datoteko razpisi.js lahko dodate svoje razpise, uporabniki pa nato po njih sprašujejo v naravnem jeziku.
+            Spodnji asistent uporablja razpise in njihove PDF priloge, shranjene v ozadju strani. V datoteko razpisi.js lahko dodate svoje razpise z več prilogami, uporabniki pa nato po njih sprašujejo v naravnem jeziku.
           </p>
           <div class="prompt-chips" aria-label="Primeri vprašanj">
             <button type="button" data-prompt="Kateri razpisi so primerni za digitalizacijo MSP in katera dokazila potrebujem?">Digitalizacija MSP</button>
             <button type="button" data-prompt="Poišči razpise za energetsko učinkovitost in povzetek pogojev.">Energetska učinkovitost</button>
+            <button type="button" data-prompt="Katere PDF priloge ima razpis za zelene investicije?">PDF priloge</button>
             <button type="button" data-prompt="Kateri razpisi imajo rok v naslednjih 45 dneh?">Roki</button>
           </div>
         </div>
@@ -122,7 +123,7 @@
             <div>
               <p class="panel-label">Baza znanja</p>
               <h3 id="loaded-tenders-title">Razpisi v ozadju</h3>
-              <p>Ti razpisi so naloženi iz <code>razpisi.js</code> in jih asistent uporablja pri odgovorih.</p>
+              <p>Ti razpisi in njihove PDF priloge so naloženi iz <code>razpisi.js</code> in jih asistent uporablja pri odgovorih.</p>
             </div>
             <div id="tenderList" class="tender-list"></div>
           </div>
@@ -146,7 +147,7 @@
             <textarea
               id="assistantInput"
               rows="3"
-              placeholder="Npr. Iščem razpis za digitalizacijo MSP ali zaposlovanje mladih ..."
+              placeholder="Npr. Iščem razpis za digitalizacijo MSP ali vprašanje o PDF prilogah ..."
               required
             ></textarea>
             <button class="button primary" type="submit">Pošlji</button>
