@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="sl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Razpisnik AI pomaga slovenskim podjetjem najti, razumeti in pripraviti prijave na javne razpise."
+    />
+    <title>Razpisnik AI | Asistent za slovenske razpise</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Razpisnik AI domov">
+        <span class="brand-mark">R</span>
+        <span>Razpisnik AI</span>
+      </a>
+      <nav class="nav" aria-label="Glavna navigacija">
+        <a href="#funkcije">Funkcije</a>
+        <a href="#asistent">AI asistent</a>
+        <a href="#viri">Viri</a>
+      </nav>
+      <a class="header-cta" href="#asistent">Preizkusi</a>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Pametno spremljanje javnih razpisov</p>
+          <h1 id="hero-title">AI asistent za slovenske razpise, ki iz dokumentacije naredi jasen akcijski načrt.</h1>
+          <p class="hero-lede">
+            Razpisnik AI pomaga ekipam filtrirati priložnosti, razumeti pogoje, preveriti upravičenost in pripraviti seznam nalog za oddajo ponudbe ali prijave.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#asistent">Vprašaj asistenta</a>
+            <a class="button secondary" href="#viri">Poglej uradne vire</a>
+          </div>
+          <dl class="hero-stats" aria-label="Ključne koristi">
+            <div>
+              <dt>3 min</dt>
+              <dd>do prvega povzetka</dd>
+            </div>
+            <div>
+              <dt>24/7</dt>
+              <dd>pregled pogojev</dd>
+            </div>
+            <div>
+              <dt>SI + EU</dt>
+              <dd>razpisni viri</dd>
+            </div>
+          </dl>
+        </div>
+
+        <aside class="hero-card" aria-label="Primer razpisa">
+          <div class="card-topline">
+            <span class="status-dot"></span>
+            <span>Aktivna priložnost</span>
+          </div>
+          <h2>Digitalizacija poslovanja MSP</h2>
+          <p>Ocenjena primernost za IT svetovalno podjetje.</p>
+          <div class="match-meter" aria-label="Ujemanje 86 odstotkov">
+            <span style="width: 86%"></span>
+          </div>
+          <ul class="check-list">
+            <li>Rok za vprašanja: preveri v dokumentaciji</li>
+            <li>Priporočena dokazila: reference, bilance, kadri</li>
+            <li>Tveganje: nejasna merila za inovativnost</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section id="funkcije" class="section" aria-labelledby="features-title">
+        <p class="section-kicker">Kaj zna</p>
+        <h2 id="features-title">Od iskanja do priprave ponudbe</h2>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-icon">🔎</span>
+            <h3>Iskanje priložnosti</h3>
+            <p>Filtriranje po dejavnosti, regiji, roku, naročniku, vrednosti in ključnih besedah iz razpisne dokumentacije.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">🧠</span>
+            <h3>Povzetek pogojev</h3>
+            <p>Asistent izlušči obvezne pogoje, merila, dokazila, roke in vprašanja, ki jih je treba razjasniti pred oddajo.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">✅</span>
+            <h3>Preverjanje primernosti</h3>
+            <p>Primerja zahteve razpisa s profilom podjetja in pripravi seznam manjkajočih dokazil ali partnerjev.</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon">📋</span>
+            <h3>Akcijski načrt</h3>
+            <p>Razdeli prijavo na naloge, odgovorne osebe in interne roke, da ekipa ne spregleda ključnih korakov.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="asistent" class="assistant-section" aria-labelledby="assistant-title">
+        <div class="assistant-copy">
+          <p class="section-kicker">Interaktivni prototip</p>
+          <h2 id="assistant-title">Vprašaj AI asistenta</h2>
+          <p>
+            Spodnji asistent je statičen prototip. Pripravljen je za povezavo z lastnim zaledjem, razpisno bazo ali OpenAI API integracijo.
+          </p>
+          <div class="prompt-chips" aria-label="Primeri vprašanj">
+            <button type="button" data-prompt="Povzemi mi razpis za digitalizacijo MSP in naštej dokazila.">Digitalizacija MSP</button>
+            <button type="button" data-prompt="Ali je naše podjetje primerno za gradbeni javni razpis v Sloveniji?">Primernost podjetja</button>
+            <button type="button" data-prompt="Pripravi kontrolni seznam za oddajo ponudbe na e-JN.">Kontrolni seznam</button>
+          </div>
+        </div>
+
+        <div class="chat-shell" role="region" aria-label="Pogovor z asistentom">
+          <div class="chat-header">
+            <div>
+              <strong>Razpisni asistent</strong>
+              <span>Specializiran za SI razpise</span>
+            </div>
+            <span class="live-pill">Demo</span>
+          </div>
+          <div id="chatMessages" class="chat-messages" aria-live="polite">
+            <article class="message assistant-message">
+              <span>AI</span>
+              <p>Pozdravljeni! Opišite razpis ali prilepite ključne pogoje. Pomagal vam bom s povzetkom, tveganji in naslednjimi koraki.</p>
+            </article>
+          </div>
+          <form id="assistantForm" class="chat-form">
+            <label class="sr-only" for="assistantInput">Vprašanje za asistenta</label>
+            <textarea
+              id="assistantInput"
+              rows="3"
+              placeholder="Npr. Iščemo razpise za digitalizacijo proizvodnje v Sloveniji ..."
+              required
+            ></textarea>
+            <button class="button primary" type="submit">Pošlji</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="viri" class="section sources" aria-labelledby="sources-title">
+        <p class="section-kicker">Uradni viri</p>
+        <h2 id="sources-title">Kje asistent išče podatke</h2>
+        <div class="source-grid">
+          <a href="https://ejn.gov.si/" target="_blank" rel="noreferrer">
+            <strong>e-JN</strong>
+            <span>Elektronsko javno naročanje v Sloveniji</span>
+          </a>
+          <a href="https://www.enarocanje.si/" target="_blank" rel="noreferrer">
+            <strong>Portal javnih naročil</strong>
+            <span>Objave javnih naročil in dokumentacije</span>
+          </a>
+          <a href="https://www.gov.si/zbirke/javne-objave/" target="_blank" rel="noreferrer">
+            <strong>GOV.SI javne objave</strong>
+            <span>Razpisi, pozivi in druge javne objave</span>
+          </a>
+          <a href="https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/home" target="_blank" rel="noreferrer">
+            <strong>EU Funding &amp; Tenders</strong>
+            <span>Evropski razpisi in tenderji</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2026 Razpisnik AI. Demo spletna stran za AI asistenta za slovenske razpise.</p>
+      <a href="#top">Nazaj na vrh ↑</a>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
